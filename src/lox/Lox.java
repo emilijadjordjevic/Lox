@@ -8,8 +8,12 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
+import lox.Interperter.RuntimeError;
+
 public class Lox {
     static boolean errorOccured = false;
+    static boolean hadRuntimeError = false;
+    private static Interperter interpreter = new Interperter();
     public static void main(String[] args) throws IOException {
         if (args.length > 1) {
             System.out.println("Usage: jlox [script]");
@@ -24,7 +28,8 @@ public class Lox {
     private static void runFile(String path) throws IOException {
         byte[] bytes = Files.readAllBytes(Paths.get(path));
         run(new String(bytes, Charset.defaultCharset()));
-        if (errorOccured ) System.exit(65);
+        if (errorOccured) System.exit(65);
+        if(hadRuntimeError) System.exit(70);
     }
                                     
     private static void runPrompt() throws IOException {
@@ -48,7 +53,8 @@ public class Lox {
 
         if (errorOccured) return;
 
-        System.out.println(new AstPrinter().print(expression));
+        // System.out.println(new AstPrinter().print(expression));
+        interpreter.interpret(expression);
     } 
 
     public static void error(int line, String message) {
@@ -61,6 +67,11 @@ public class Lox {
         } else {
             report(token.line, " at '" + token.lexeme + "' ", message);
         }
+    }
+
+    static void runtimeError(RuntimeError error) {
+        System.err.println(error.getMessage() + "\n[line " + error.token.line + "]");
+        hadRuntimeError = true;
     }
 
     public static void report(int line, String where, String message) {

@@ -69,10 +69,10 @@ public class Lexer {
                     addToken(TokenType.SLASH);
                 }
                 break;
-            case '!' : addToken(match('=') ? TokenType.BANG_EQUAL : TokenType.BANG);
-            case '=' : addToken(match('=') ? TokenType.EQUAL : TokenType.EQUAL_EQUAL);
-            case '<' : addToken(match('=') ? TokenType.LESS : TokenType.LESS_EQUAL);
-            case '>' : addToken(match('=') ? TokenType.GREATER : TokenType.GREATER_EQUAL);
+            case '!' : addToken(match('=') ? TokenType.BANG_EQUAL : TokenType.BANG); break;
+            case '=' : addToken(match('=') ? TokenType.EQUAL_EQUAL : TokenType.EQUAL); break;
+            case '<' : addToken(match('=') ? TokenType.LESS : TokenType.LESS_EQUAL); break;
+            case '>' : addToken(match('=') ? TokenType.GREATER : TokenType.GREATER_EQUAL); break;
             //ignore the whitespace
             case ' ' : 
             case '\r' :
